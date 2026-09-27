@@ -92,8 +92,29 @@ install_app() {
 if [ "$MODE" != "app" ]; then install_configs; fi
 if [ "$MODE" != "config" ]; then install_app; fi
 
-# Reload only when the app is answering on its socket.
-if [ -S "$CONFIG_DIR/KiwiDesk.sock" ] && [ "$MODE" != "app" ]; then
-    "$APP/Contents/MacOS/KiwiDesk" reload_config || true
+# Wait for the app to answer, then make the install true: reload
+# the synced config and, where the active profile is not ours (a
+# new machine's display fingerprint never matched its saved
+# monitor set), adopt it explicitly so its settings apply —
+# Scrolling everywhere, borders off, the menu-bar readout.
+CLI="$APP/Contents/MacOS/KiwiDesk"
+if [ -x "$CLI" ]; then
+    for _ in $(seq 1 15); do
+        [ -S "$CONFIG_DIR/KiwiDesk.sock" ] && break
+        sleep 1
+    done
+    if [ -S "$CONFIG_DIR/KiwiDesk.sock" ]; then
+        "$CLI" reload_config >/dev/null || true
+        status="$("$CLI" get_profile_status 2>/dev/null || true)"
+        name="$(printf '%s' "$status" \
+            | sed -n 's/.*"name" *: *"\([^"]*\)".*/\1/p')"
+        if [ -n "$name" ] \
+            && [ "$name" != "My Setup - laptop" ]; then
+            "$CLI" load_profile "My Setup - laptop" >/dev/null \
+                || true
+        fi
+        echo "==> profile: $("$CLI" get_profile_status \
+            2>/dev/null || echo unknown)"
+    fi
 fi
-echo "Done."
+echo "Done. Details: personal/README.md"
