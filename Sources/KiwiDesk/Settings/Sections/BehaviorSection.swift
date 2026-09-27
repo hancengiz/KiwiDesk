@@ -12,6 +12,7 @@ struct BehaviorSection: View {
                 mouseSection
                 cuesSection
                 quitSection
+                statusSection
             }
             .padding([.horizontal, .bottom], SettingsMetrics.paneInset)
         }
@@ -51,6 +52,43 @@ struct BehaviorSection: View {
                         + "the window — at a size limit, or where "
                         + "the layout has nothing to resize. This "
                         + "adds the system alert sound to it."
+                )
+            )
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+    }
+
+    /// The menu bar item's occupied-Spaces list readout
+    /// (fork-local, 2026-09-27). Draft-set like its neighbours,
+    /// applied on Save; the item itself reads the live setting.
+    private var statusSection: some View {
+        SettingsSection(SettingsCatalog.behavior.statusCard) {
+            Toggle(
+                L(
+                    "behavior.status.spaces",
+                    "List Spaces holding windows"
+                ),
+                isOn: Binding(
+                    get: {
+                        model.config.settings
+                            .statusOccupiedSpaces
+                    },
+                    set: { on in
+                        model.config.settings
+                            .statusOccupiedSpaces = on
+                    }
+                )
+            )
+            Text(
+                L(
+                    "behavior.status.spaces.help",
+                    "The menu bar item shows every Space that "
+                        + "holds windows — its number with a "
+                        + "window count, the active one bold — "
+                        + "instead of each screen's active Space. "
+                        + "Turn the Space Bar off; the bar would "
+                        + "duplicate the list."
                 )
             )
             .font(.caption)

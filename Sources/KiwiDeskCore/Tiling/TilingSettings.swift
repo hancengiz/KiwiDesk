@@ -60,6 +60,12 @@ public struct TilingSettings: Sendable, Equatable {
     /// Defaults ON with them (owner ruling 2026-09-10), so the
     /// row's "all three" reading is never false on a fresh setup.
     public var shortcutPanelLiquidGlass = true
+
+    /// The menu bar item lists every Space that holds windows
+    /// — number plus window count — instead of each screen's
+    /// active Space. Fork-local surface (owner, 2026-09-27);
+    /// reads only while the Space Bar is off.
+    public var statusOccupiedSpaces = false
     /// Space spawn placement overrides (`placement.override[space_id]`).
     public var placementOverride: [SpaceID: SpawnPlacement] =
         [:]

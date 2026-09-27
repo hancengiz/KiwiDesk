@@ -18,11 +18,17 @@ enum BehaviorRowOrder {
         .behaviour(.quitGridTargetDepth)
     ]
 
+    /// The menu bar Spaces card (fork-local, 2026-09-27).
+    static let status: [SettingKey] = [
+        .behaviour(.statusOccupiedSpaces)
+    ]
+
     /// Every row this area draws, by container.
     static let byContainer: [SettingsContainer: [SettingKey]] = [
         .mouse: mouse,
         .cues: cues,
         .onQuit: onQuit,
+        .status: status,
     ]
 
     /// Containers rendered via bespoke views rather than static lists.
@@ -30,5 +36,6 @@ enum BehaviorRowOrder {
         .mouse,
         .cues,
         .onQuit,
+        .status,
     ]
 }

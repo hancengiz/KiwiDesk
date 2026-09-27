@@ -222,7 +222,10 @@
       "liquid_glass": true,
       "mark": true
     },
-    "swap_skips_cascade": true
+    "swap_skips_cascade": true,
+    "status": {
+      "occupied_spaces": true
+    }
   },
   "space_modes": {
     "1": "scrolling",

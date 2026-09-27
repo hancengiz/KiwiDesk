@@ -27,6 +27,7 @@ enum SettingsContainer: CaseIterable, Hashable {
     case cues
     case moveWindows
     case onQuit
+    case status
     case openApplications
     case optionalSettings
     case palettes
@@ -69,7 +70,7 @@ enum SettingsContainer: CaseIterable, Hashable {
             .focus, .gaps, .general, .generalKeys, .grid,
             .habits, .kiwishelf, .appliesImmediately, .layers, .luaBindings,
             .monitorFingerprints, .monocle, .mouse,
-            .moveWindows, .onQuit, .openApplications,
+            .moveWindows, .onQuit, .openApplications, .status,
             .optionalSettings, .palettes, .perSpaceOverrides,
             .pinnedToDisconnectedMonitors, .presets,
             .profilesPerMacOSSpace, .floatRules,

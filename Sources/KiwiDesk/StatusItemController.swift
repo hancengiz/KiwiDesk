@@ -179,7 +179,9 @@ final class StatusItemController: NSObject, NSMenuDelegate {
             return
         }
         button.toolTip = L("menu.status.tooltip", "KiwiDesk")
-        if let spaceMark, !spaceMark.screens.isEmpty {
+        if let spaceMark, !spaceMark.occupied.isEmpty {
+            applyOccupiedSpaces(spaceMark, to: button)
+        } else if let spaceMark, !spaceMark.screens.isEmpty {
             applySpaceMark(spaceMark, to: button)
         } else if let layer = spaceMark?.layer, layer.hasIcon {
             applyLayerIcon(layer.glyph, to: button)

@@ -100,6 +100,8 @@ extension KiwiCore {
             return setRefusalSound(args)
         case "set_shortcut_panel_liquid_glass":
             return setShortcutPanelLiquidGlass(args)
+        case "set_status_occupied_spaces":
+            return setStatusOccupiedSpaces(args)
         case "help", "list_commands":
             // With a name, one record; without, the whole
             // surface grouped (#1033). The argument used to be

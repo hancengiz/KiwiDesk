@@ -66,6 +66,10 @@ public enum APIReference {
                 "set_shortcut_panel_liquid_glass",
                 "set_shortcut_panel_liquid_glass"
             ),
+            (
+                "set_status_occupied_spaces",
+                "set_status_occupied_spaces"
+            ),
             ("set_fallback_space", "set_fallback_space"),
             ("set_space_icon", "set_space_icon"),
             (

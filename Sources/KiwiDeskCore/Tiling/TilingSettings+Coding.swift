@@ -32,6 +32,7 @@ extension TilingSettings: Codable {
         case shortcutPanel = "shortcut_panel"
         case resize
         case space
+        case status
     }
 
     enum QuitKeys: String, CodingKey {
@@ -57,6 +58,12 @@ extension TilingSettings: Codable {
     /// it nests like `app_bar` rather than sitting flat.
     enum ShortcutPanelKeys: String, CodingKey {
         case liquidGlass = "liquid_glass"
+    }
+
+    /// The menu bar item's own group — a surface, so it nests
+    /// like `shortcut_panel` rather than sitting flat.
+    enum StatusKeys: String, CodingKey {
+        case occupiedSpaces = "occupied_spaces"
     }
 
     enum DragKeys: String, CodingKey {
@@ -164,6 +171,7 @@ extension TilingSettings: Codable {
         try decodeResize(from: container)
         try decodeRefusal(from: container)
         try decodeShortcutPanel(from: container)
+        try decodeStatus(from: container)
         try decodeQuit(from: container)
     }
 
@@ -243,6 +251,21 @@ extension TilingSettings: Codable {
                 Bool.self,
                 forKey: .liquidGlass
             ) ?? TilingSettings().shortcutPanelLiquidGlass
+    }
+
+    private mutating func decodeStatus(
+        from container: Container
+    ) throws {
+        guard container.contains(.status) else { return }
+        let status = try container.nestedContainer(
+            keyedBy: StatusKeys.self,
+            forKey: .status
+        )
+        statusOccupiedSpaces =
+            try status.decodeIfPresent(
+                Bool.self,
+                forKey: .occupiedSpaces
+            ) ?? false
     }
 
     private mutating func decodeSpace(

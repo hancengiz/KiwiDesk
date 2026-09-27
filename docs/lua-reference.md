@@ -802,6 +802,29 @@ what it writes.
 KiwiDesk.set_shortcut_panel_liquid_glass(true)
 ```
 
+
+::::unreleased
+### set_status_occupied_spaces
+
+**Expects:** `true` or `false` (default `false`).
+
+**Does:** the menu bar item lists every Space that holds
+windows — its number with a window count beside it, the active
+Space bold — instead of the Space each screen shows. The active
+Space stays listed even while it holds nothing. A fork-local
+surface (this fork's owner, 2026-09-27); it reads only while
+the Space Bar is off, the bar being the surface that would
+duplicate the list.
+
+Stored as `status.occupied_spaces` in the profile. The GUI twin
+is Behaviour ▸ **Menu bar Spaces**.
+
+**Example:**
+
+```lua
+KiwiDesk.set_status_occupied_spaces(true)
+```
+:::
 ### Space Identity
 
 Spaces are identified by **strings or numbers** — `1` and `"1"`

@@ -56,6 +56,10 @@ extension APIReference {
                 + "shortcuts panel.",
             .boolean("enabled")
         ),
+        "set_status_occupied_spaces": APIRecord(
+            "Lists every occupied Space in the menu bar item.",
+            .boolean("enabled")
+        ),
         "set_new_window_placement_override": APIRecord(
             "Overrides where new windows land for one Space.",
             .space("space"),

@@ -36,6 +36,21 @@ extension KiwiCore {
         return .ok()
     }
 
+    /// `KiwiDesk.set_status_occupied_spaces(bool)`: the menu
+    /// bar item's occupied-Spaces list (fork-local, 2026-09-27).
+    /// Top-level like the panel leaf — a group of one. No
+    /// retile: the mark republishes off the bar refresh.
+    func setStatusOccupiedSpaces(
+        _ args: [JSONValue]
+    ) -> CommandResponse {
+        guard let on = args.first?.boolValue else {
+            return .fail("expected a boolean")
+        }
+        tiler.settings.statusOccupiedSpaces = on
+        publishStatusSpaceMark()
+        return .ok()
+    }
+
     /// Whether a resize WRITE animates: the configured policy,
     /// except during a held glide, which writes INSTANTLY
     /// (#1082, owner ruling 2026-08-29). The glide already IS the

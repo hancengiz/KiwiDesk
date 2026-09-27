@@ -179,4 +179,10 @@ struct BehaviorControls: Sendable {
         "behavior.cues.title",
         "When an action can't apply"
     )
+
+    /// The menu bar item's occupied-Spaces list (fork-local).
+    let statusCard = SettingsControl(
+        "behavior.status.title",
+        "Menu bar Spaces"
+    )
 }

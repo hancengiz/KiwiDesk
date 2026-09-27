@@ -42,11 +42,24 @@ public struct StatusSpaceMark: Equatable {
         public let glyph: Glyph
     }
 
+    /// One occupied Space for the menu bar's list readout:
+    /// its id, how many windows it holds, and whether it is
+    /// the active one (fork-local surface, 2026-09-27).
+    public struct Occupied: Equatable {
+        public let space: SpaceID
+        public let windows: Int
+        public let active: Bool
+    }
+
     /// nil on `default`, which has no icon.
     public let layer: Layer?
     /// One per display showing a Space, unordered — the GUI
     /// ranks them (`DeskOrder`). Empty while the bar is on.
     public let screens: [Screen]
+    /// Every Space holding windows (the active Space always
+    /// included), in profile order — empty unless the setting
+    /// is on and the Space Bar is off.
+    public var occupied: [Occupied] = []
 }
 
 extension KiwiCore {
@@ -76,7 +89,28 @@ extension KiwiCore {
                 glyph: StatusSpaceMark.Glyph(spaceGlyph(for: space))
             )
         }
-        return StatusSpaceMark(layer: layer, screens: screens)
+        // The occupied list readout (fork-local): the active
+        // Space stays listed even while it holds nothing.
+        let active = state.workspaces.activeSpace
+        let occupied: [StatusSpaceMark.Occupied] =
+            tiler.settings.statusOccupiedSpaces
+            ? state.workspaces.allSpaces
+                .filter {
+                    !$0.windows.isEmpty || $0.id == active
+                }
+                .map {
+                    StatusSpaceMark.Occupied(
+                        space: $0.id,
+                        windows: $0.windows.count,
+                        active: $0.id == active
+                    )
+                }
+            : []
+        return StatusSpaceMark(
+            layer: layer,
+            screens: screens,
+            occupied: occupied
+        )
     }
 
     /// Publishes the mark off the bar's own refresh, so every

@@ -41,6 +41,16 @@ extension SettingsValueReadout {
                     new: after.refusalSound
                 )
             ]
+
+        case .statusOccupiedSpaces:
+            return [
+                behaviourToggleRow(
+                    census,
+                    label: label(for: census),
+                    old: before.statusOccupiedSpaces,
+                    new: after.statusOccupiedSpaces
+                )
+            ]
         case .swapSkipsCascade:
             return [
                 behaviourToggleRow(

@@ -12,6 +12,7 @@ enum BehaviourKey: String, CaseIterable, Hashable {
     case quitGridTargetDepth = "settings.quitGridTargetDepth"
     case mouseResize = "settings.mouseResize"
     case mouseFollowsFocus = "settings.mouse.followsFocus"
+    case statusOccupiedSpaces = "settings.statusOccupiedSpaces"
 }
 
 extension BehaviourKey {
@@ -30,6 +31,9 @@ extension BehaviourKey {
             return .row(.behaviour, .onQuit, .atRest)
         case .mouseResize, .mouseFollowsFocus:
             return .row(.behaviour, .mouse, .atRest)
+        case .statusOccupiedSpaces:
+            // Behaviour ▸ Menu bar Spaces (fork-local, 2026-09-27).
+            return .row(.behaviour, .status, .atRest)
         }
     }
 }
@@ -59,6 +63,11 @@ extension BehaviourKey {
             )
         case .mouseFollowsFocus:
             return .text("behavior.mouse.follows_focus")
+        case .statusOccupiedSpaces:
+            return .text(
+                "behavior.status.spaces",
+                help: "behavior.status.spaces.help"
+            )
         }
     }
 }

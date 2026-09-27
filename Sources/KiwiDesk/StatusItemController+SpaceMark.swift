@@ -49,6 +49,136 @@ extension StatusItemController {
         }
     }
 
+    /// The occupied-Spaces list readout (fork-local, 2026-09-27):
+    /// every Space holding windows as its number with a
+    /// superscript count, the active one full weight. Replaces
+    /// the per-screen glyphs while the setting is on.
+    func applyOccupiedSpaces(
+        _ mark: StatusSpaceMark,
+        to button: NSStatusBarButton
+    ) {
+        let name = Self.occupiedName(mark)
+        button.setAccessibilityLabel(name)
+        button.toolTip = name
+        button.image = Self.occupiedImage(mark)
+        button.title = ""
+    }
+
+    static func occupiedName(
+        _ mark: StatusSpaceMark
+    ) -> String {
+        let summary = LocalizedList.join(
+            mark.occupied.map {
+                "\($0.space.raw) \($0.windows)"
+            }
+        )
+        return L(
+            "menu.status.occupied.a11y",
+            "KiwiDesk (Spaces holding windows: %1$@)",
+            summary
+        )
+    }
+
+    static func occupiedImage(
+        _ mark: StatusSpaceMark
+    ) -> SpaceMarkImage {
+        let font = NSFont.menuBarFont(ofSize: 0)
+        let bold = NSFontManager.shared.convert(
+            font,
+            toHaveTrait: .boldFontMask
+        )
+        let countFont = NSFont.menuBarFont(ofSize: 9)
+
+        // One entry per drawn group: a layer monogram, or a
+        // number with its count glued on. Dividers go between
+        // groups, never inside one.
+        var groups: [[NSAttributedString]] = []
+        if let layer = mark.layer, !layer.hasIcon,
+            case .text(let text, let tinted) = layer.glyph, tinted
+        {
+            // An icon-less layer still monograms the item; an
+            // icon layer keeps the brand glyph out of the list.
+            groups.append([
+                NSAttributedString(
+                    string: text,
+                    attributes: [
+                        .font: font,
+                        .foregroundColor: NSColor.labelColor
+                            .withAlphaComponent(0.55),
+                    ]
+                )
+            ])
+        }
+        for item in mark.occupied {
+            let alpha: CGFloat = item.active ? 1 : 0.55
+            groups.append([
+                NSAttributedString(
+                    string: item.space.raw,
+                    attributes: [
+                        .font: item.active ? bold : font,
+                        .foregroundColor: NSColor.labelColor
+                            .withAlphaComponent(alpha),
+                    ]
+                ),
+                NSAttributedString(
+                    string: String(item.windows),
+                    attributes: [
+                        .font: countFont,
+                        .baselineOffset: 3.5,
+                        .foregroundColor: NSColor.labelColor
+                            .withAlphaComponent(alpha),
+                    ]
+                ),
+            ])
+        }
+
+        let sizes = groups.map { $0.map { $0.size() } }
+        var textWidth: CGFloat = 0
+        for group in sizes {
+            for size in group {
+                textWidth += size.width
+            }
+        }
+        let spacing =
+            CGFloat(max(groups.count - 1, 0))
+            * (gap * 2 + 1)
+        let image = SpaceMarkImage(
+            size: CGSize(
+                width: max(textWidth + spacing, 1),
+                height: height
+            ),
+            flipped: false
+        ) { _ in
+            var x: CGFloat = 0
+            for (groupIndex, group) in groups.enumerated() {
+                if groupIndex > 0 {
+                    NSColor.labelColor
+                        .withAlphaComponent(0.35).setFill()
+                    CGRect(
+                        x: x + gap,
+                        y: (height - dividerHeight) / 2,
+                        width: 1,
+                        height: dividerHeight
+                    ).fill()
+                    x += gap * 2 + 1
+                }
+                for (runIndex, run) in group.enumerated() {
+                    let size = sizes[groupIndex][runIndex]
+                    run.draw(
+                        at: CGPoint(
+                            x: x + (runIndex == 0 ? 0 : 1),
+                            y: (height - size.height) / 2
+                        )
+                    )
+                    x += size.width + (runIndex == 0 ? 1 : 0)
+                }
+            }
+            return true
+        }
+        image.isTemplate = true
+        return image
+    }
+
     /// The button's name and tooltip: the layer, then each
     /// screen's Space in the drawn order.
     static func spaceMarkName(_ mark: StatusSpaceMark) -> String {

@@ -89,6 +89,15 @@ extension TilingSettings {
             shortcutPanelLiquidGlass,
             forKey: .liquidGlass
         )
+
+        var status = container.nestedContainer(
+            keyedBy: StatusKeys.self,
+            forKey: .status
+        )
+        try status.encode(
+            statusOccupiedSpaces,
+            forKey: .occupiedSpaces
+        )
         var quit = container.nestedContainer(
             keyedBy: QuitKeys.self,
             forKey: .quit
