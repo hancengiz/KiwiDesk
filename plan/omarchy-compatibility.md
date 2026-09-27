@@ -176,4 +176,13 @@ the app is showing its Setup window and IPC is not up until the user clicks
 it. Remaining once granted: reload_config, live smoke of screen focus and
 window send/follow, scratch summon, cycling and one synthetic-chord check,
 Attribution recorded above.
+
+### Owner correction (2026-09-27, evening)
+
+Window swaps ride bare Option+Shift+arrows (Super+Shift in Omarchy terms);
+Control+Option+Shift+arrows is retired. Focus stays Control+Option+arrows
+(Super+Ctrl). Word-by-word text selection on Option+Shift+arrows is the
+accepted trade; bare Option+arrows stay native. Installer, boundary test
+(red-proofed by reverting the tier), recipe docs and the live config all
+carry the correction; reload_config applied it to the running app.
 Do not describe the workflow as verified until that smoke passes.

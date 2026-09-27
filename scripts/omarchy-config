@@ -89,7 +89,7 @@ def core_bindings():
     for direction in ("left", "right", "up", "down"):
         for mods, verb, label in (
             ("control+option", "focus", "Focus window"),
-            ("control+option+shift", "swap", "Swap window"),
+            ("option+shift", "swap", "Swap window"),
             ("control+command", "focus_display", "Focus screen"),
             ("control+command+shift", "move_to_display_and_follow",
              "Move window to screen and follow"),
@@ -234,9 +234,12 @@ def transform_config(config):
             if key in seen:
                 raise ValueError(f"Duplicate shortcut in {layer['name']}")
             seen.add(key)
-            if key - {"left", "right", "up", "down"} in (
-                {"option"}, {"option", "shift"}
-            ) and key & {"left", "right", "up", "down"}:
+            # Bare Option+arrows stay native (word navigation);
+            # Option+Shift+arrows carry window swaps by the
+            # owner's ruling (2026-09-27), accepting the loss of
+            # word selection on those chords.
+            if key - {"left", "right", "up", "down"} == {"option"} \
+                and key & {"left", "right", "up", "down"}:
                 raise ValueError(f"Text-editing arrow in {layer['name']}")
             if "MacarchyKeys" in item["lua"] or "macarchy-" in item["lua"]:
                 raise ValueError("Custom legacy reference needs manual migration")

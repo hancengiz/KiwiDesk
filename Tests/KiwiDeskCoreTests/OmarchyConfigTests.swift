@@ -115,14 +115,29 @@ struct OmarchyConfigTests {
                 return try #require(KeyCombo.parse(raw))
             }
             #expect(Set(combos).count == combos.count)
+            // Bare Option+arrows stay reserved for native word
+            // navigation; Option+Shift+arrows carry swaps.
             for direction in ["left", "right", "up", "down"] {
-                for modifiers in ["option", "option+shift"] {
-                    let reserved = try #require(
-                        KeyCombo.parse("\(modifiers)+\(direction)")
-                    )
-                    #expect(!combos.contains(reserved))
-                }
+                let reserved = try #require(
+                    KeyCombo.parse("option+\(direction)")
+                )
+                #expect(!combos.contains(reserved))
             }
+        }
+        let main = try #require(
+            layers.first?.objectValue?["bindings"]?.arrayValue
+        )
+        for direction in ["left", "right", "up", "down"] {
+            let swap = try #require(
+                KeyCombo.parse("option+shift+\(direction)")
+            )
+            #expect(
+                main.contains { row in
+                    KeyCombo.parse(
+                        row.objectValue?["combo"]?.stringValue ?? ""
+                    ) == swap
+                }
+            )
         }
         #expect(
             !ManagedConfig.declaresManagedSettings(

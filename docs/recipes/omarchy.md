@@ -95,7 +95,7 @@ In this table, **arrow** means Left, Right, Up or Down; **digit** means
 | Chord | Action |
 | --- | --- |
 | Control+Option+arrow | Focus neighboring window |
-| Control+Option+Shift+arrow | Swap neighboring window |
+| Option+Shift+arrow | Swap neighboring window |
 | Control+Command+arrow | Focus neighboring screen's shown Space |
 | Control+Command+Tab / +Shift+Tab | Next / previous screen, wrapping |
 | Control+Command+Shift+arrow | Move window to neighboring screen and follow |
@@ -166,8 +166,10 @@ survive reload or profile application.
 
 ## macOS and application conflicts
 
-- Bare Option+arrows and Shift+Option+arrows are deliberately unbound so
-  native word/paragraph navigation and selection work. No remapper is needed.
+- Bare Option+arrows stay unbound so native word navigation works.
+  Option+Shift+arrows are bound to window swaps by the owner's ruling
+  (2026-09-27): selecting text word-by-word with those chords is given up
+  for Omarchy muscle memory — ⌘+Shift+arrows line selection is unaffected.
 - Control+Option is VoiceOver's usual modifier. Focus, swap, fullscreen
   and former-Space chords can conflict when VoiceOver is enabled. Choose
   an accessible alternative in Settings rather than disabling assistive
