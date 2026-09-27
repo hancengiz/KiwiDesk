@@ -1,0 +1,99 @@
+#!/bin/bash
+# Personal distribution installer.
+#
+# This repo is a private fork of KiwiDesk. This script makes a
+# machine match it exactly: it builds the app from this checkout,
+# installs it to /Applications with Sparkle's updater keys STRIPPED
+# (a local build must never auto-update itself over the release
+# channel), and syncs the configuration from personal/ into
+# ~/.config/KiwiDesk — backing up whatever it replaces.
+#
+# Usage:
+#   scripts/install-personal                 # app + configs
+#   scripts/install-personal --config-only   # configs only
+#   scripts/install-personal --app-only      # build + app only
+#
+# Signing: build-app.sh signs with the sole "Developer ID
+# Application" identity in the keychain (falling back to ad-hoc).
+# A stable identity keeps the Accessibility grant across rebuilds;
+# an ad-hoc build will ask for the grant again after install.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+CONFIG_DIR="$HOME/.config/KiwiDesk"
+APP="/Applications/KiwiDesk.app"
+MODE="all"
+case "${1:-}" in
+    "") ;;
+    --config-only) MODE="config" ;;
+    --app-only) MODE="app" ;;
+    *) echo "error: unknown argument '$1'" >&2; exit 2 ;;
+esac
+
+install_configs() {
+    if [ ! -f "$ROOT/personal/gui.json" ]; then
+        echo "error: personal/ is missing from this checkout" >&2
+        exit 1
+    fi
+    mkdir -p "$CONFIG_DIR/profiles"
+    local backup
+    backup="$CONFIG_DIR/personal-backup-$(date +%Y%m%d-%H%M%S)"
+    mkdir -p "$backup/profiles"
+    for name in gui.json init.lua; do
+        if [ -f "$CONFIG_DIR/$name" ]; then
+            cp "$CONFIG_DIR/$name" "$backup/$name"
+        fi
+        cp "$ROOT/personal/$name" "$CONFIG_DIR/$name"
+    done
+    for path in "$ROOT"/personal/profiles/*.json; do
+        local name
+        name="$(basename "$path")"
+        if [ -f "$CONFIG_DIR/profiles/$name" ]; then
+            cp "$CONFIG_DIR/profiles/$name" "$backup/profiles/$name"
+        fi
+        cp "$path" "$CONFIG_DIR/profiles/$name"
+    done
+    echo "==> configs installed (backup: $backup)"
+}
+
+install_app() {
+    bash "$ROOT/scripts/build-app.sh" --allow-no-icon
+
+    # Local-build policy: no update channel, then re-seal.
+    local identity
+    identity="$(security find-identity -v -p codesigning 2>/dev/null \
+        | sed -n 's/.*"\(Developer ID Application: [^"]*\)".*/\1/p' \
+        | head -1)"
+    if [ -z "$identity" ]; then
+        echo "warning: no Developer ID identity; keeping ad-hoc sign" \
+             "— Accessibility will need a re-grant" >&2
+        identity="-"
+    fi
+    for key in SUFeedURL SUEnableAutomaticChecks SUPublicEDKey; do
+        /usr/libexec/PlistBuddy -c "Delete :$key" \
+            "$ROOT/.build/app/KiwiDesk.app/Contents/Info.plist" \
+            >/dev/null 2>&1 || true
+    done
+    codesign --force --options runtime --sign "$identity" \
+        "$ROOT/.build/app/KiwiDesk.app" >/dev/null
+
+    osascript -e 'tell application id "com.kiwicanopy.kiwidesk" to quit' \
+        >/dev/null 2>&1 || true
+    for _ in $(seq 1 20); do
+        pgrep -f "KiwiDesk.app/Contents/MacOS/KiwiDesk" >/dev/null || break
+        sleep 0.5
+    done
+    rm -rf "$APP"
+    ditto "$ROOT/.build/app/KiwiDesk.app" "$APP"
+    open -a "$APP"
+    echo "==> app installed and launched"
+}
+
+if [ "$MODE" != "app" ]; then install_configs; fi
+if [ "$MODE" != "config" ]; then install_app; fi
+
+# Reload only when the app is answering on its socket.
+if [ -S "$CONFIG_DIR/KiwiDesk.sock" ] && [ "$MODE" != "app" ]; then
+    "$APP/Contents/MacOS/KiwiDesk" reload_config || true
+fi
+echo "Done."

@@ -198,3 +198,12 @@ unchanged), covered by LuaCommandVerdictTests; both the bridge and the
 chord map are mutation-proofed. Native word/paragraph movement and
 selection on Option/Option+Shift arrows is the accepted trade. Applied
 live via the installer and reload_config.
+
+### Personal distribution (2026-09-27, late)
+
+The fork carries the owner's configuration: `personal/` (gui.json,
+init.lua, profiles) plus `scripts/install-personal`, which builds and
+installs the app with the updater stripped and syncs the configs with a
+backup. Privacy-audited before vendoring (no usernames, paths, keys;
+monitor model names only). The separate kiwidesk-config-backup repo is
+retired; the local copy remains as the rollback holder.

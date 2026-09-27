@@ -1,0 +1,956 @@
+{
+  "app_rules" : {
+
+  },
+  "desktop_spaces" : {
+    "68913A79-72B2-4C79-B0B3-FF76895942FD" : "4",
+    "D08E3747-196A-490B-AE7B-17976E3F4410" : "2",
+    "FB94EA04-F5AA-4D6F-94F1-AE00B59B6918" : "4"
+  },
+  "float_rules" : [
+
+  ],
+  "format" : 4,
+  "ignore_rules" : [
+
+  ],
+  "layers" : [
+    {
+      "bindings" : [
+        {
+          "combo" : "option+left",
+          "kind" : "custom",
+          "label" : "Focus window or screen left",
+          "lua" : "OmarchyKeys.focusDirection(\"left\")"
+        },
+        {
+          "combo" : "control+option+left",
+          "kind" : "custom",
+          "label" : "Focus window left",
+          "lua" : "KiwiDesk.focus(\"left\")"
+        },
+        {
+          "combo" : "option+shift+left",
+          "kind" : "custom",
+          "label" : "Move window in direction left",
+          "lua" : "OmarchyKeys.moveDirection(\"left\")"
+        },
+        {
+          "combo" : "control+command+left",
+          "kind" : "custom",
+          "label" : "Focus screen left",
+          "lua" : "KiwiDesk.focus_display(\"left\")"
+        },
+        {
+          "combo" : "control+command+shift+left",
+          "kind" : "custom",
+          "label" : "Move window to screen and follow left",
+          "lua" : "KiwiDesk.move_to_display_and_follow(\"left\")"
+        },
+        {
+          "combo" : "control+option+command+left",
+          "kind" : "custom",
+          "label" : "Send window to screen left",
+          "lua" : "KiwiDesk.move_to_display(\"left\")"
+        },
+        {
+          "combo" : "option+command+shift+left",
+          "kind" : "custom",
+          "label" : "Move whole Space left",
+          "lua" : "OmarchyKeys.moveSpace(\"left\")"
+        },
+        {
+          "combo" : "option+right",
+          "kind" : "custom",
+          "label" : "Focus window or screen right",
+          "lua" : "OmarchyKeys.focusDirection(\"right\")"
+        },
+        {
+          "combo" : "control+option+right",
+          "kind" : "custom",
+          "label" : "Focus window right",
+          "lua" : "KiwiDesk.focus(\"right\")"
+        },
+        {
+          "combo" : "option+shift+right",
+          "kind" : "custom",
+          "label" : "Move window in direction right",
+          "lua" : "OmarchyKeys.moveDirection(\"right\")"
+        },
+        {
+          "combo" : "control+command+right",
+          "kind" : "custom",
+          "label" : "Focus screen right",
+          "lua" : "KiwiDesk.focus_display(\"right\")"
+        },
+        {
+          "combo" : "control+command+shift+right",
+          "kind" : "custom",
+          "label" : "Move window to screen and follow right",
+          "lua" : "KiwiDesk.move_to_display_and_follow(\"right\")"
+        },
+        {
+          "combo" : "control+option+command+right",
+          "kind" : "custom",
+          "label" : "Send window to screen right",
+          "lua" : "KiwiDesk.move_to_display(\"right\")"
+        },
+        {
+          "combo" : "option+command+shift+right",
+          "kind" : "custom",
+          "label" : "Move whole Space right",
+          "lua" : "OmarchyKeys.moveSpace(\"right\")"
+        },
+        {
+          "combo" : "option+up",
+          "kind" : "custom",
+          "label" : "Focus window or screen up",
+          "lua" : "OmarchyKeys.focusDirection(\"up\")"
+        },
+        {
+          "combo" : "control+option+up",
+          "kind" : "custom",
+          "label" : "Focus window up",
+          "lua" : "KiwiDesk.focus(\"up\")"
+        },
+        {
+          "combo" : "option+shift+up",
+          "kind" : "custom",
+          "label" : "Move window in direction up",
+          "lua" : "OmarchyKeys.moveDirection(\"up\")"
+        },
+        {
+          "combo" : "control+command+up",
+          "kind" : "custom",
+          "label" : "Focus screen up",
+          "lua" : "KiwiDesk.focus_display(\"up\")"
+        },
+        {
+          "combo" : "control+command+shift+up",
+          "kind" : "custom",
+          "label" : "Move window to screen and follow up",
+          "lua" : "KiwiDesk.move_to_display_and_follow(\"up\")"
+        },
+        {
+          "combo" : "control+option+command+up",
+          "kind" : "custom",
+          "label" : "Send window to screen up",
+          "lua" : "KiwiDesk.move_to_display(\"up\")"
+        },
+        {
+          "combo" : "option+command+shift+up",
+          "kind" : "custom",
+          "label" : "Move whole Space up",
+          "lua" : "OmarchyKeys.moveSpace(\"up\")"
+        },
+        {
+          "combo" : "option+down",
+          "kind" : "custom",
+          "label" : "Focus window or screen down",
+          "lua" : "OmarchyKeys.focusDirection(\"down\")"
+        },
+        {
+          "combo" : "control+option+down",
+          "kind" : "custom",
+          "label" : "Focus window down",
+          "lua" : "KiwiDesk.focus(\"down\")"
+        },
+        {
+          "combo" : "option+shift+down",
+          "kind" : "custom",
+          "label" : "Move window in direction down",
+          "lua" : "OmarchyKeys.moveDirection(\"down\")"
+        },
+        {
+          "combo" : "control+command+down",
+          "kind" : "custom",
+          "label" : "Focus screen down",
+          "lua" : "KiwiDesk.focus_display(\"down\")"
+        },
+        {
+          "combo" : "control+command+shift+down",
+          "kind" : "custom",
+          "label" : "Move window to screen and follow down",
+          "lua" : "KiwiDesk.move_to_display_and_follow(\"down\")"
+        },
+        {
+          "combo" : "control+option+command+down",
+          "kind" : "custom",
+          "label" : "Send window to screen down",
+          "lua" : "KiwiDesk.move_to_display(\"down\")"
+        },
+        {
+          "combo" : "option+command+shift+down",
+          "kind" : "custom",
+          "label" : "Move whole Space down",
+          "lua" : "OmarchyKeys.moveSpace(\"down\")"
+        },
+        {
+          "combo" : "option+1",
+          "kind" : "custom",
+          "label" : "Go to Space 1",
+          "lua" : "KiwiDesk.focus_space(\"1\")"
+        },
+        {
+          "combo" : "option+shift+1",
+          "kind" : "custom",
+          "label" : "Move and follow 1",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"1\")"
+        },
+        {
+          "combo" : "option+command+shift+1",
+          "kind" : "custom",
+          "label" : "Send to Space 1",
+          "lua" : "KiwiDesk.move_to_space(\"1\")"
+        },
+        {
+          "combo" : "option+2",
+          "kind" : "custom",
+          "label" : "Go to Space 2",
+          "lua" : "KiwiDesk.focus_space(\"2\")"
+        },
+        {
+          "combo" : "option+shift+2",
+          "kind" : "custom",
+          "label" : "Move and follow 2",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"2\")"
+        },
+        {
+          "combo" : "option+command+shift+2",
+          "kind" : "custom",
+          "label" : "Send to Space 2",
+          "lua" : "KiwiDesk.move_to_space(\"2\")"
+        },
+        {
+          "combo" : "option+3",
+          "kind" : "custom",
+          "label" : "Go to Space 3",
+          "lua" : "KiwiDesk.focus_space(\"3\")"
+        },
+        {
+          "combo" : "option+shift+3",
+          "kind" : "custom",
+          "label" : "Move and follow 3",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"3\")"
+        },
+        {
+          "combo" : "option+command+shift+3",
+          "kind" : "custom",
+          "label" : "Send to Space 3",
+          "lua" : "KiwiDesk.move_to_space(\"3\")"
+        },
+        {
+          "combo" : "option+4",
+          "kind" : "custom",
+          "label" : "Go to Space 4",
+          "lua" : "KiwiDesk.focus_space(\"4\")"
+        },
+        {
+          "combo" : "option+shift+4",
+          "kind" : "custom",
+          "label" : "Move and follow 4",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"4\")"
+        },
+        {
+          "combo" : "option+command+shift+4",
+          "kind" : "custom",
+          "label" : "Send to Space 4",
+          "lua" : "KiwiDesk.move_to_space(\"4\")"
+        },
+        {
+          "combo" : "option+5",
+          "kind" : "custom",
+          "label" : "Go to Space 5",
+          "lua" : "KiwiDesk.focus_space(\"5\")"
+        },
+        {
+          "combo" : "option+shift+5",
+          "kind" : "custom",
+          "label" : "Move and follow 5",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"5\")"
+        },
+        {
+          "combo" : "option+command+shift+5",
+          "kind" : "custom",
+          "label" : "Send to Space 5",
+          "lua" : "KiwiDesk.move_to_space(\"5\")"
+        },
+        {
+          "combo" : "option+8",
+          "kind" : "custom",
+          "label" : "Go to Space 8",
+          "lua" : "KiwiDesk.focus_space(\"8\")"
+        },
+        {
+          "combo" : "option+shift+8",
+          "kind" : "custom",
+          "label" : "Move and follow 8",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"8\")"
+        },
+        {
+          "combo" : "option+command+shift+8",
+          "kind" : "custom",
+          "label" : "Send to Space 8",
+          "lua" : "KiwiDesk.move_to_space(\"8\")"
+        },
+        {
+          "combo" : "option+9",
+          "kind" : "custom",
+          "label" : "Go to Space 9",
+          "lua" : "KiwiDesk.focus_space(\"9\")"
+        },
+        {
+          "combo" : "option+shift+9",
+          "kind" : "custom",
+          "label" : "Move and follow 9",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"9\")"
+        },
+        {
+          "combo" : "option+command+shift+9",
+          "kind" : "custom",
+          "label" : "Send to Space 9",
+          "lua" : "KiwiDesk.move_to_space(\"9\")"
+        },
+        {
+          "combo" : "option+0",
+          "kind" : "custom",
+          "label" : "Go to Space 10",
+          "lua" : "KiwiDesk.focus_space(\"10\")"
+        },
+        {
+          "combo" : "option+shift+0",
+          "kind" : "custom",
+          "label" : "Move and follow 10",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"10\")"
+        },
+        {
+          "combo" : "option+command+shift+0",
+          "kind" : "custom",
+          "label" : "Send to Space 10",
+          "lua" : "KiwiDesk.move_to_space(\"10\")"
+        },
+        {
+          "combo" : "option+tab",
+          "kind" : "custom",
+          "label" : "Next numbered Space",
+          "lua" : "OmarchyKeys.cycle(1)"
+        },
+        {
+          "combo" : "option+shift+tab",
+          "kind" : "custom",
+          "label" : "Previous numbered Space",
+          "lua" : "OmarchyKeys.cycle(-1)"
+        },
+        {
+          "combo" : "control+option+tab",
+          "kind" : "custom",
+          "label" : "Former Space",
+          "lua" : "OmarchyKeys.back()"
+        },
+        {
+          "combo" : "control+command+tab",
+          "kind" : "custom",
+          "label" : "Next screen",
+          "lua" : "KiwiDesk.focus_display(\"next\")"
+        },
+        {
+          "combo" : "control+command+shift+tab",
+          "kind" : "custom",
+          "label" : "Previous screen",
+          "lua" : "KiwiDesk.focus_display(\"prev\")"
+        },
+        {
+          "combo" : "option+f",
+          "kind" : "custom",
+          "label" : "Monocle \/ previous layout",
+          "lua" : "OmarchyKeys.monocle(KiwiDesk.set_mode)"
+        },
+        {
+          "combo" : "option+t",
+          "kind" : "custom",
+          "label" : "Toggle floating",
+          "lua" : "KiwiDesk.toggle_floating()"
+        },
+        {
+          "combo" : "option+p",
+          "kind" : "custom",
+          "label" : "Reset layout sizing to profile",
+          "lua" : "KiwiDesk.reset_layout_sizing()"
+        },
+        {
+          "combo" : "option+l",
+          "kind" : "custom",
+          "label" : "Toggle Scrolling \/ BSP",
+          "lua" : "local s = KiwiDesk.get_layout_info(); if s then KiwiDesk.set_mode(s.space_id, s.mode == \"scrolling\" and \"bsp\" or \"scrolling\") end"
+        },
+        {
+          "combo" : "option+k",
+          "kind" : "custom",
+          "label" : "Show shortcuts",
+          "lua" : "KiwiDesk.show_shortcuts()"
+        },
+        {
+          "combo" : "option+space",
+          "kind" : "custom",
+          "label" : "Show shortcuts",
+          "lua" : "KiwiDesk.show_shortcuts()"
+        },
+        {
+          "combo" : "control+option+comma",
+          "kind" : "custom",
+          "label" : "Open Settings",
+          "lua" : "KiwiDesk.open_settings()"
+        },
+        {
+          "combo" : "option+minus",
+          "kind" : "custom",
+          "label" : "Resize x by -100",
+          "lua" : "KiwiDesk.resize(\"x\", -100)"
+        },
+        {
+          "combo" : "option+equal",
+          "kind" : "custom",
+          "label" : "Resize x by 100",
+          "lua" : "KiwiDesk.resize(\"x\", 100)"
+        },
+        {
+          "combo" : "option+shift+minus",
+          "kind" : "custom",
+          "label" : "Resize y by -100",
+          "lua" : "KiwiDesk.resize(\"y\", -100)"
+        },
+        {
+          "combo" : "option+shift+equal",
+          "kind" : "custom",
+          "label" : "Resize y by 100",
+          "lua" : "KiwiDesk.resize(\"y\", 100)"
+        },
+        {
+          "combo" : "control+option+minus",
+          "kind" : "custom",
+          "label" : "Resize x by -25",
+          "lua" : "KiwiDesk.resize(\"x\", -25)"
+        },
+        {
+          "combo" : "control+option+equal",
+          "kind" : "custom",
+          "label" : "Resize x by 25",
+          "lua" : "KiwiDesk.resize(\"x\", 25)"
+        },
+        {
+          "combo" : "option+s",
+          "kind" : "custom",
+          "label" : "Summon scratch \/ return",
+          "lua" : "OmarchyKeys.scratch()"
+        },
+        {
+          "combo" : "option+backtick",
+          "kind" : "custom",
+          "label" : "Summon scratch \/ return",
+          "lua" : "OmarchyKeys.scratch()"
+        },
+        {
+          "combo" : "option+command+s",
+          "kind" : "custom",
+          "label" : "Send to scratch without following",
+          "lua" : "OmarchyKeys.sendScratch()"
+        },
+        {
+          "combo" : "option+shift+backtick",
+          "kind" : "custom",
+          "label" : "Send to scratch without following",
+          "lua" : "OmarchyKeys.sendScratch()"
+        },
+        {
+          "combo" : "control+option+f",
+          "kind" : "custom",
+          "label" : "Toggle native macOS fullscreen",
+          "lua" : "KiwiDesk.exec(\"\/usr\/bin\/osascript -e 'tell application \\\"System Events\\\"\\n    set targetName to name of first application process whose frontmost is true\\n    tell process targetName\\n        set targetWindow to value of attribute \\\"AXFocusedWindow\\\"\\n        set value of attribute \\\"AXFullScreen\\\" of targetWindow to not (value of attribute \\\"AXFullScreen\\\" of targetWindow)\\n    end tell\\nend tell'\")"
+        },
+        {
+          "combo" : "option+w",
+          "kind" : "custom",
+          "label" : "Close focused window (macOS Accessibility)",
+          "lua" : "KiwiDesk.exec(\"\/usr\/bin\/osascript -e 'tell application \\\"System Events\\\"\\n    set targetName to name of first application process whose frontmost is true\\n    tell process targetName\\n        set targetWindow to value of attribute \\\"AXFocusedWindow\\\"\\n        perform action \\\"AXPress\\\" of (value of attribute \\\"AXCloseButton\\\" of targetWindow)\\n    end tell\\nend tell'\")"
+        },
+        {
+          "combo" : "option+q",
+          "kind" : "custom",
+          "label" : "Close focused window (macOS Accessibility)",
+          "lua" : "KiwiDesk.exec(\"\/usr\/bin\/osascript -e 'tell application \\\"System Events\\\"\\n    set targetName to name of first application process whose frontmost is true\\n    tell process targetName\\n        set targetWindow to value of attribute \\\"AXFocusedWindow\\\"\\n        perform action \\\"AXPress\\\" of (value of attribute \\\"AXCloseButton\\\" of targetWindow)\\n    end tell\\nend tell'\")"
+        },
+        {
+          "combo" : "option+command+2",
+          "kind" : "navigation",
+          "label" : "Grow width",
+          "lua" : "KiwiDesk.resize(\"x\", 50)"
+        },
+        {
+          "combo" : "option+command+1",
+          "kind" : "navigation",
+          "label" : "Shrink width",
+          "lua" : "KiwiDesk.resize(\"x\", -50)"
+        },
+        {
+          "combo" : "option+command+5",
+          "kind" : "navigation",
+          "label" : "Grow height",
+          "lua" : "KiwiDesk.resize(\"y\", 50)"
+        },
+        {
+          "combo" : "option+command+4",
+          "kind" : "navigation",
+          "label" : "Shrink height",
+          "lua" : "KiwiDesk.resize(\"y\", -50)"
+        },
+        {
+          "combo" : "control+option+s",
+          "kind" : "navigation",
+          "label" : "Toggle sticky",
+          "lua" : "KiwiDesk.toggle_sticky()"
+        },
+        {
+          "combo" : "control+option+p",
+          "kind" : "navigation",
+          "label" : "Toggle display sticky",
+          "lua" : "KiwiDesk.toggle_display_sticky()"
+        },
+        {
+          "combo" : "control+option+k",
+          "kind" : "navigation",
+          "label" : "Show shortcuts panel",
+          "lua" : "KiwiDesk.show_shortcuts()"
+        },
+        {
+          "combo" : "option+enter",
+          "kind" : "application",
+          "label" : "New iTerm window",
+          "lua" : "KiwiDesk.exec(\"\/usr\/bin\/osascript -e 'tell application \\\"iTerm\\\" to create window with default profile'\")"
+        },
+        {
+          "combo" : "option+shift+enter",
+          "kind" : "application",
+          "label" : "Open default browser",
+          "lua" : "KiwiDesk.exec(\"\/usr\/bin\/open https:\/\/www.google.com\")"
+        },
+        {
+          "combo" : "option+shift+f",
+          "kind" : "application",
+          "label" : "Open home folder",
+          "lua" : "KiwiDesk.exec(\"\/usr\/bin\/open \\\"$HOME\\\"\")"
+        },
+        {
+          "combo" : "option+shift+e",
+          "kind" : "application",
+          "label" : "Open default email composer",
+          "lua" : "KiwiDesk.exec(\"\/usr\/bin\/open mailto:\")"
+        },
+        {
+          "combo" : "option+shift+n",
+          "kind" : "application",
+          "label" : "Open or focus Zed",
+          "lua" : "KiwiDesk.pull_or_spawn(\"dev.zed.Zed\")"
+        },
+        {
+          "combo" : "option+shift+m",
+          "kind" : "application",
+          "label" : "Open or focus Spotify",
+          "lua" : "KiwiDesk.pull_or_spawn(\"com.spotify.client\")"
+        },
+        {
+          "combo" : "option+shift+o",
+          "kind" : "application",
+          "label" : "Open or focus Obsidian",
+          "lua" : "KiwiDesk.pull_or_spawn(\"md.obsidian\")"
+        },
+        {
+          "combo" : "option+shift+a",
+          "kind" : "application",
+          "label" : "Open or focus ChatGPT",
+          "lua" : "KiwiDesk.pull_or_spawn(\"com.openai.codex\")"
+        },
+        {
+          "combo" : "option+shift+c",
+          "kind" : "application",
+          "label" : "Open or focus Calendar",
+          "lua" : "KiwiDesk.pull_or_spawn(\"com.apple.iCal\")"
+        },
+        {
+          "combo" : "option+v",
+          "kind" : "application",
+          "label" : "Open or focus Maccy",
+          "lua" : "KiwiDesk.pull_or_spawn(\"org.p0deje.Maccy\")"
+        },
+        {
+          "combo" : "option+r",
+          "kind" : "custom",
+          "label" : "Enter resize layer",
+          "lua" : "KiwiDesk.switch_layer(\"omarchy-resize\")"
+        },
+        {
+          "combo" : "option+shift+escape",
+          "kind" : "custom",
+          "label" : "Enter system layer",
+          "lua" : "KiwiDesk.switch_layer(\"omarchy-system\")"
+        },
+        {
+          "combo" : "option+semicolon",
+          "kind" : "custom",
+          "label" : "Enter passthrough layer",
+          "lua" : "KiwiDesk.switch_layer(\"omarchy-passthrough\")"
+        },
+        {
+          "combo" : "control+option+r",
+          "kind" : "custom",
+          "label" : "Reload config (default shortcuts stay active)",
+          "lua" : "KiwiDesk.exec(\"\/Applications\/KiwiDesk.app\/Contents\/MacOS\/KiwiDesk reload_config\")"
+        },
+        {
+          "combo" : "control+option+1",
+          "kind" : "navigation",
+          "label" : "Go to Space 1",
+          "lua" : "KiwiDesk.focus_space(\"1\")"
+        },
+        {
+          "combo" : "control+option+shift+1",
+          "kind" : "navigation",
+          "label" : "Move to Space 1",
+          "lua" : "KiwiDesk.move_to_space(\"1\")"
+        },
+        {
+          "combo" : "control+option+command+1",
+          "kind" : "navigation",
+          "label" : "Move to Space 1 & follow",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"1\")"
+        },
+        {
+          "combo" : "control+option+2",
+          "kind" : "navigation",
+          "label" : "Go to Space 2",
+          "lua" : "KiwiDesk.focus_space(\"2\")"
+        },
+        {
+          "combo" : "control+option+shift+2",
+          "kind" : "navigation",
+          "label" : "Move to Space 2",
+          "lua" : "KiwiDesk.move_to_space(\"2\")"
+        },
+        {
+          "combo" : "control+option+command+2",
+          "kind" : "navigation",
+          "label" : "Move to Space 2 & follow",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"2\")"
+        },
+        {
+          "combo" : "control+option+3",
+          "kind" : "navigation",
+          "label" : "Go to Space 3",
+          "lua" : "KiwiDesk.focus_space(\"3\")"
+        },
+        {
+          "combo" : "control+option+shift+3",
+          "kind" : "navigation",
+          "label" : "Move to Space 3",
+          "lua" : "KiwiDesk.move_to_space(\"3\")"
+        },
+        {
+          "combo" : "control+option+command+3",
+          "kind" : "navigation",
+          "label" : "Move to Space 3 & follow",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"3\")"
+        },
+        {
+          "combo" : "control+option+4",
+          "kind" : "navigation",
+          "label" : "Go to Space 4",
+          "lua" : "KiwiDesk.focus_space(\"4\")"
+        },
+        {
+          "combo" : "control+option+shift+4",
+          "kind" : "navigation",
+          "label" : "Move to Space 4",
+          "lua" : "KiwiDesk.move_to_space(\"4\")"
+        },
+        {
+          "combo" : "control+option+command+4",
+          "kind" : "navigation",
+          "label" : "Move to Space 4 & follow",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"4\")"
+        },
+        {
+          "combo" : "control+option+5",
+          "kind" : "navigation",
+          "label" : "Go to Space 5",
+          "lua" : "KiwiDesk.focus_space(\"5\")"
+        },
+        {
+          "combo" : "control+option+shift+5",
+          "kind" : "navigation",
+          "label" : "Move to Space 5",
+          "lua" : "KiwiDesk.move_to_space(\"5\")"
+        },
+        {
+          "combo" : "control+option+command+5",
+          "kind" : "navigation",
+          "label" : "Move to Space 5 & follow",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"5\")"
+        },
+        {
+          "combo" : "control+option+8",
+          "kind" : "navigation",
+          "label" : "Go to Space 8",
+          "lua" : "KiwiDesk.focus_space(\"8\")"
+        },
+        {
+          "combo" : "control+option+shift+8",
+          "kind" : "navigation",
+          "label" : "Move to Space 8",
+          "lua" : "KiwiDesk.move_to_space(\"8\")"
+        },
+        {
+          "combo" : "control+option+command+8",
+          "kind" : "navigation",
+          "label" : "Move to Space 8 & follow",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"8\")"
+        },
+        {
+          "combo" : "control+option+9",
+          "kind" : "navigation",
+          "label" : "Go to Space 9",
+          "lua" : "KiwiDesk.focus_space(\"9\")"
+        },
+        {
+          "combo" : "control+option+shift+9",
+          "kind" : "navigation",
+          "label" : "Move to Space 9",
+          "lua" : "KiwiDesk.move_to_space(\"9\")"
+        },
+        {
+          "combo" : "control+option+command+9",
+          "kind" : "navigation",
+          "label" : "Move to Space 9 & follow",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"9\")"
+        },
+        {
+          "combo" : "control+option+0",
+          "kind" : "navigation",
+          "label" : "Go to Space 10",
+          "lua" : "KiwiDesk.focus_space(\"10\")"
+        },
+        {
+          "combo" : "control+option+shift+0",
+          "kind" : "navigation",
+          "label" : "Move to Space 10",
+          "lua" : "KiwiDesk.move_to_space(\"10\")"
+        },
+        {
+          "combo" : "control+option+command+0",
+          "kind" : "navigation",
+          "label" : "Move to Space 10 & follow",
+          "lua" : "KiwiDesk.move_to_space_and_follow(\"10\")"
+        }
+      ],
+      "name" : "default"
+    },
+    {
+      "bindings" : [
+        {
+          "combo" : "left",
+          "kind" : "navigation",
+          "label" : "Resize x by -25",
+          "lua" : "KiwiDesk.resize(\"x\", -25)"
+        },
+        {
+          "combo" : "right",
+          "kind" : "navigation",
+          "label" : "Resize x by 25",
+          "lua" : "KiwiDesk.resize(\"x\", 25)"
+        },
+        {
+          "combo" : "up",
+          "kind" : "navigation",
+          "label" : "Resize y by -25",
+          "lua" : "KiwiDesk.resize(\"y\", -25)"
+        },
+        {
+          "combo" : "down",
+          "kind" : "navigation",
+          "label" : "Resize y by 25",
+          "lua" : "KiwiDesk.resize(\"y\", 25)"
+        },
+        {
+          "combo" : "minus",
+          "kind" : "navigation",
+          "label" : "Resize x by -100",
+          "lua" : "KiwiDesk.resize(\"x\", -100)"
+        },
+        {
+          "combo" : "equal",
+          "kind" : "navigation",
+          "label" : "Resize x by 100",
+          "lua" : "KiwiDesk.resize(\"x\", 100)"
+        },
+        {
+          "combo" : "b",
+          "kind" : "navigation",
+          "label" : "Reset layout sizing to profile",
+          "lua" : "KiwiDesk.reset_layout_sizing()"
+        },
+        {
+          "combo" : "enter",
+          "kind" : "custom",
+          "label" : "Return to default",
+          "lua" : "KiwiDesk.switch_layer(\"default\")"
+        },
+        {
+          "combo" : "escape",
+          "kind" : "custom",
+          "label" : "Return to default",
+          "lua" : "KiwiDesk.switch_layer(\"default\")"
+        },
+        {
+          "combo" : "control+option+k",
+          "kind" : "navigation",
+          "label" : "Show shortcuts panel",
+          "lua" : "KiwiDesk.show_shortcuts()"
+        },
+        {
+          "combo" : "control+option+comma",
+          "kind" : "navigation",
+          "label" : "Open Settings",
+          "lua" : "KiwiDesk.open_settings()"
+        }
+      ],
+      "icon" : "arrow.up.left.and.arrow.down.right",
+      "name" : "omarchy-resize"
+    },
+    {
+      "bindings" : [
+        {
+          "combo" : "a",
+          "kind" : "custom",
+          "label" : "Sound settings",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.exec(\"\/usr\/bin\/open x-apple.systempreferences:com.apple.Sound-Settings.extension\")"
+        },
+        {
+          "combo" : "b",
+          "kind" : "custom",
+          "label" : "Bluetooth settings",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.exec(\"\/usr\/bin\/open x-apple.systempreferences:com.apple.BluetoothSettings\")"
+        },
+        {
+          "combo" : "w",
+          "kind" : "custom",
+          "label" : "Network settings",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.exec(\"\/usr\/bin\/open x-apple.systempreferences:com.apple.Network-Settings.extension\")"
+        },
+        {
+          "combo" : "d",
+          "kind" : "custom",
+          "label" : "Display settings",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.exec(\"\/usr\/bin\/open x-apple.systempreferences:com.apple.Displays-Settings.extension\")"
+        },
+        {
+          "combo" : "p",
+          "kind" : "custom",
+          "label" : "Appearance settings",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.exec(\"\/usr\/bin\/open x-apple.systempreferences:com.apple.Appearance-Settings.extension\")"
+        },
+        {
+          "combo" : "f",
+          "kind" : "custom",
+          "label" : "Wallpaper settings",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.exec(\"\/usr\/bin\/open x-apple.systempreferences:com.apple.Wallpaper-Settings.extension\")"
+        },
+        {
+          "combo" : "n",
+          "kind" : "custom",
+          "label" : "Notification settings",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.exec(\"\/usr\/bin\/open x-apple.systempreferences:com.apple.Notifications-Settings.extension\")"
+        },
+        {
+          "combo" : "i",
+          "kind" : "custom",
+          "label" : "Lock Screen settings",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.exec(\"\/usr\/bin\/open x-apple.systempreferences:com.apple.Lock-Screen-Settings.extension\")"
+        },
+        {
+          "combo" : "t",
+          "kind" : "application",
+          "label" : "Open or focus Activity Monitor",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.pull_or_spawn(\"com.apple.ActivityMonitor\")"
+        },
+        {
+          "combo" : "r",
+          "kind" : "application",
+          "label" : "Open or focus Reminders",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.pull_or_spawn(\"com.apple.reminders\")"
+        },
+        {
+          "combo" : "c",
+          "kind" : "custom",
+          "label" : "Open screenshot controls",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.exec(\"\/usr\/bin\/open -a Screenshot\")"
+        },
+        {
+          "combo" : "l",
+          "kind" : "custom",
+          "label" : "Lock the Mac",
+          "lua" : "KiwiDesk.switch_layer(\"default\"); KiwiDesk.exec(\"\/usr\/bin\/osascript -e 'tell application \\\"System Events\\\" to keystroke \\\"q\\\" using {control down, command down}'\")"
+        },
+        {
+          "combo" : "escape",
+          "kind" : "custom",
+          "label" : "Return to default",
+          "lua" : "KiwiDesk.switch_layer(\"default\")"
+        },
+        {
+          "combo" : "option+shift+escape",
+          "kind" : "custom",
+          "label" : "Return to default",
+          "lua" : "KiwiDesk.switch_layer(\"default\")"
+        },
+        {
+          "combo" : "control+option+k",
+          "kind" : "navigation",
+          "label" : "Show shortcuts panel",
+          "lua" : "KiwiDesk.show_shortcuts()"
+        },
+        {
+          "combo" : "control+option+comma",
+          "kind" : "navigation",
+          "label" : "Open Settings",
+          "lua" : "KiwiDesk.open_settings()"
+        }
+      ],
+      "icon" : "gearshape",
+      "name" : "omarchy-system"
+    },
+    {
+      "bindings" : [
+        {
+          "combo" : "option+semicolon",
+          "kind" : "custom",
+          "label" : "Resume default shortcuts",
+          "lua" : "KiwiDesk.switch_layer(\"default\")"
+        }
+      ],
+      "icon" : "keyboard",
+      "name" : "omarchy-passthrough"
+    }
+  ],
+  "profile_bindings" : {
+
+  },
+  "spaces" : [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "8",
+    "9",
+    "10",
+    "scratch"
+  ]
+}
