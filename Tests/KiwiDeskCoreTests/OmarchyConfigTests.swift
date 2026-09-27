@@ -101,7 +101,7 @@ struct OmarchyConfigTests {
         #expect(try fixture.backups().count == 1)
     }
 
-    @Test("fresh shortcuts do not collide or consume text-editing arrows")
+    @Test("direction chords carry unified focus and move")
     func freshKeymapBoundaries() throws {
         let fixture = try OmarchyFixture()
         defer { fixture.cleanup() }
@@ -115,29 +115,33 @@ struct OmarchyConfigTests {
                 return try #require(KeyCombo.parse(raw))
             }
             #expect(Set(combos).count == combos.count)
-            // Bare Option+arrows stay reserved for native word
-            // navigation; Option+Shift+arrows carry swaps.
-            for direction in ["left", "right", "up", "down"] {
-                let reserved = try #require(
-                    KeyCombo.parse("option+\(direction)")
-                )
-                #expect(!combos.contains(reserved))
-            }
         }
+        // Option and Option+Shift arrows are bound by the owner's
+        // ruling (2026-09-27): bare Super chords carry the unified
+        // direction verbs, replacing native word navigation there.
         let main = try #require(
             layers.first?.objectValue?["bindings"]?.arrayValue
         )
         for direction in ["left", "right", "up", "down"] {
-            let swap = try #require(
-                KeyCombo.parse("option+shift+\(direction)")
-            )
-            #expect(
-                main.contains { row in
-                    KeyCombo.parse(
-                        row.objectValue?["combo"]?.stringValue ?? ""
-                    ) == swap
-                }
-            )
+            for (modifiers, call) in [
+                ("option", "OmarchyKeys.focusDirection"),
+                ("option+shift", "OmarchyKeys.moveDirection"),
+            ] {
+                let chord = try #require(
+                    KeyCombo.parse("\(modifiers)+\(direction)")
+                )
+                let row = try #require(
+                    main.first { row in
+                        KeyCombo.parse(
+                            row.objectValue?["combo"]?.stringValue ?? ""
+                        ) == chord
+                    }
+                )
+                #expect(
+                    row.objectValue?["lua"]?.stringValue
+                        == "\(call)(\"\(direction)\")"
+                )
+            }
         }
         #expect(
             !ManagedConfig.declaresManagedSettings(

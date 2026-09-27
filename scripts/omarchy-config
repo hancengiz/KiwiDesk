@@ -87,17 +87,22 @@ def core_bindings():
         result.append(binding(combo, label, lua))
 
     for direction in ("left", "right", "up", "down"):
-        for mods, verb, label in (
-            ("control+option", "focus", "Focus window"),
-            ("option+shift", "swap", "Swap window"),
-            ("control+command", "focus_display", "Focus screen"),
-            ("control+command+shift", "move_to_display_and_follow",
+        for mods, call, label in (
+            ("option", "OmarchyKeys.focusDirection",
+             "Focus window or screen"),
+            ("control+option", "KiwiDesk.focus", "Focus window"),
+            ("option+shift", "OmarchyKeys.moveDirection",
+             "Move window in direction"),
+            ("control+command", "KiwiDesk.focus_display",
+             "Focus screen"),
+            ("control+command+shift",
+             "KiwiDesk.move_to_display_and_follow",
              "Move window to screen and follow"),
-            ("control+option+command", "move_to_display",
+            ("control+option+command", "KiwiDesk.move_to_display",
              "Send window to screen"),
         ):
             add(f"{mods}+{direction}", f"{label} {direction}",
-                f'KiwiDesk.{verb}("{direction}")')
+                f'{call}("{direction}")')
         add(f"option+command+shift+{direction}",
             f"Move whole Space {direction}",
             f'OmarchyKeys.moveSpace("{direction}")')
@@ -234,13 +239,6 @@ def transform_config(config):
             if key in seen:
                 raise ValueError(f"Duplicate shortcut in {layer['name']}")
             seen.add(key)
-            # Bare Option+arrows stay native (word navigation);
-            # Option+Shift+arrows carry window swaps by the
-            # owner's ruling (2026-09-27), accepting the loss of
-            # word selection on those chords.
-            if key - {"left", "right", "up", "down"} == {"option"} \
-                and key & {"left", "right", "up", "down"}:
-                raise ValueError(f"Text-editing arrow in {layer['name']}")
             if "MacarchyKeys" in item["lua"] or "macarchy-" in item["lua"]:
                 raise ValueError("Custom legacy reference needs manual migration")
     return result

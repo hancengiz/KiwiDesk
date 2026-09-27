@@ -23,6 +23,13 @@ Three safety rails apply to all Lua code:
 - A callback (event handler or keybinding) that errors or
   times out is **disabled** and logged; everything else keeps
   working until the next `reload_config`.
+
+:::unreleased
+- A dispatcher command that returns no payload answers its verdict in
+  Lua: `true` when it succeeded, `false` when it was refused (the refusal
+  is logged as before). Commands with a payload still return only the
+  payload — test `type(result) == "table"` when both shapes are possible.
+:::
 - A typo'd function name on `KiwiDesk` or a layout table
   (`scroll.set_width(…)` for `scroll.set_slot_size(…)`) does
   **not** abort the config: the call becomes a no-op that logs

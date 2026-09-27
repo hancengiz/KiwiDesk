@@ -91,6 +91,20 @@ end
 function OmarchyKeys.moveSpace(direction)
     local id = KiwiDesk.get_state().active_space
     if id then KiwiDesk.move_space_to_display(id, direction) end
+
+-- Omarchy's direction verbs: act on the window neighbor in that
+-- direction, else on the screen in that direction. The bridge
+-- answers true/false for these data-less commands, so a failed
+-- window probe falls through to the screen verb.
+function OmarchyKeys.focusDirection(direction)
+    if KiwiDesk.focus(direction) then return end
+    KiwiDesk.focus_display(direction)
+end
+
+function OmarchyKeys.moveDirection(direction)
+    if KiwiDesk.swap(direction) then return end
+    KiwiDesk.move_to_display_and_follow(direction)
+end
 end
 
 -- The mode-changing function is supplied by the structured shortcut.

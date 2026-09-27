@@ -186,3 +186,15 @@ accepted trade; bare Option+arrows stay native. Installer, boundary test
 (red-proofed by reverting the tier), recipe docs and the live config all
 carry the correction; reload_config applied it to the running app.
 Do not describe the workflow as verified until that smoke passes.
+
+### Second owner correction (2026-09-27, night)
+
+Omarchy's unified direction verbs now ride the bare Super chords:
+Option+arrow focuses the window — or, at the edge, the screen — in that
+direction; Option+Shift+arrow swaps with a neighbor or moves the window
+to that screen and follows. Enabling this needed a Lua bridge contract:
+data-less dispatcher commands answer true/false in Lua (payload commands
+unchanged), covered by LuaCommandVerdictTests; both the bridge and the
+chord map are mutation-proofed. Native word/paragraph movement and
+selection on Option/Option+Shift arrows is the accepted trade. Applied
+live via the installer and reload_config.

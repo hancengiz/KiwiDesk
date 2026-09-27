@@ -168,7 +168,11 @@ extension KiwiCore {
             if let error = response.error {
                 self.onLog("\(command): \(error)")
             }
-            return response.data?.luaValue ?? .none
+            // A data-less verdict (swap/focus/move…) answers
+            // true/false so a Lua fallback can test it; commands
+            // with a payload still return only the payload.
+            return response.data?.luaValue
+                ?? .bool(response.error == nil)
         }
     }
 
