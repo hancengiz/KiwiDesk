@@ -11,7 +11,7 @@ public enum PositionalDisplays {
 
     /// Orders displays with main first, then secondaries
     /// left-to-right, remaining ties broken deterministically
-    /// (`minY`, then fingerprint). A nil or absent `mainID` hands
+    /// (`minY`, fingerprint, then raw ID). A nil or absent `mainID` hands
     /// the main slot to the leftmost — every position resolves.
     public static func ordered(
         _ displays: [Display],
@@ -25,7 +25,10 @@ public enum PositionalDisplays {
             if lhs.frame.minY != rhs.frame.minY {
                 return lhs.frame.minY < rhs.frame.minY
             }
-            return lhs.fingerprint < rhs.fingerprint
+            if lhs.fingerprint != rhs.fingerprint {
+                return lhs.fingerprint < rhs.fingerprint
+            }
+            return lhs.id.raw < rhs.id.raw
         }
         guard
             let main = sorted.first(where: { $0.id == mainID })

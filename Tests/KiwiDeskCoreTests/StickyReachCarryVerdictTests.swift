@@ -199,6 +199,11 @@ struct StickyReachCarryVerdictTests {
     func profileApplyCarriesNow() {
         let core = makeCore()
         defer { teardown() }
+        // The saved placement must not inherit the host's main display.
+        core.spacePins = [
+            "1": authorityDisplay(1, "A").fingerprint,
+            "5": authorityDisplay(2, "B", x: 100).fingerprint,
+        ]
         #expect(
             core.execute("save_profile", args: [.string("Reach")])
                 .isSuccess

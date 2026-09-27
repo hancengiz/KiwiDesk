@@ -25,7 +25,7 @@ private func connect(_ core: KiwiCore, _ names: [String]) {
     for (index, name) in names.enumerated() {
         core.state.workspaces.upsertDisplay(
             Display(
-                id: DisplayID(UInt32(index + 1)),
+                id: DisplayID(UInt32(index + 10001)),
                 name: name,
                 frame: CGRect(
                     x: CGFloat(index) * 100,
@@ -200,10 +200,10 @@ struct ScreenSetupModelTests {
         let core = makeCore()
         connect(core, ["Sidecar"])
         try core.persistProfile(named: "Vision", modes: nil)
-        core.state.workspaces.removeDisplay(DisplayID(1))
+        core.state.workspaces.removeDisplay(DisplayID(10001))
         core.state.workspaces.upsertDisplay(
             Display(
-                id: DisplayID(1),
+                id: DisplayID(10001),
                 name: "Sidecar",
                 frame: CGRect(x: 0, y: 0, width: 200, height: 100)
             )

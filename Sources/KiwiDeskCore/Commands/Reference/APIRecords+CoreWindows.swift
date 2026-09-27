@@ -31,6 +31,21 @@ extension APIReference {
                 + "to it.",
             .space("space")
         ),
+        "focus_display": APIRecord(
+            "Focuses a screen's shown Space; accepts an index, "
+                + "fingerprint, name, next, prev or direction.",
+            .text("display")
+        ),
+        "move_to_display": APIRecord(
+            "Sends to shown Space, without following; display: "
+                + "index/name/fingerprint/next/prev/direction.",
+            .text("display")
+        ),
+        "move_to_display_and_follow": APIRecord(
+            "Moves to shown Space and follows; display: "
+                + "index/name/fingerprint/next/prev/direction.",
+            .text("display")
+        ),
         "focus_desktop": APIRecord(
             "Switches to a macOS Desktop, exactly as a swipe "
                 + "would.",
@@ -49,8 +64,8 @@ extension APIReference {
             .space("space", optional: true)
         ),
         "move_space_to_display": APIRecord(
-            "Moves a Space to another screen, named by number, "
-                + "fingerprint or name, and shows it there.",
+            "Moves and shows a Space; display: "
+                + "index/name/fingerprint/next/prev/direction.",
             .space("space"),
             .text("display")
         ),

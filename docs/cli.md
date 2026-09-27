@@ -215,6 +215,44 @@ exports nothing.
 
 ## Commands
 
+:::unreleased
+### Display navigation
+
+| Command | Arguments | Effect |
+|---|---|---|
+| `focus_display` | display selector | Focus the Space that screen already shows |
+| `move_to_display` | display selector | Send the focused window to that screen's shown Space; keep focus here |
+| `move_to_display_and_follow` | display selector | Move to that screen's shown Space and follow the window |
+
+Selectors accept the 1-based `list_monitors` index, fingerprint,
+exact name, `next`, `prev`, `left`, `right`, `up` or `down`.
+Explicit identities win over relative words. Cycles wrap, including
+on one display. Spatial moves use display centers, including diagonal
+neighbors; [the Lua reference](lua-reference.md#focus_display)
+defines ranking and tie-breaking. A missing neighbor or a display
+with no Space refuses without creating or switching Spaces.
+
+`move_space_to_display` also accepts these relative selectors.
+`pin_space_to_display` still requires an explicit identity.
+Window moves refuse native-fullscreen windows and retain the
+[`move_to_space` sticky restrictions](lua-reference.md#move_to_space).
+
+`list_monitors` returns positional order, each row carrying
+`index`, `id`, `name`, `fingerprint`, `x`, `y`, `width`, `height`,
+`active_space` (shown Space id or `null`) and `active` (boolean).
+Geometry is in AppKit global points, with positive y upward.
+`get_state` adds `active_display`, and each object in `spaces`
+adds `display`: raw numeric display ids or `null`, joined to
+`list_monitors`'s `id`, not its positional `index`.
+
+```sh
+kiwidesk focus_display left
+kiwidesk move_to_display 2
+kiwidesk move_to_display_and_follow next
+kiwidesk move_space_to_display scratch right
+```
+:::
+
 | Category | Command | Arguments |
 |---|---|---|
 | Navigation | `focus` | `left\|right\|up\|down` |

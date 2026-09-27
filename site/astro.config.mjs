@@ -134,6 +134,7 @@ export default defineConfig({
           label: "Recipes",
           items: [
             { label: "Overview", slug: "docs/recipes" },
+            { label: "Omarchy Workflow", slug: "docs/recipes/omarchy" },
             { label: "SketchyBar", slug: "docs/recipes/sketchybar" },
             {
               label: "JankyBorders",

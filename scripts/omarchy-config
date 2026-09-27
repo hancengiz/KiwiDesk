@@ -1,0 +1,331 @@
+#!/usr/bin/env python3
+"""Preview or install GUI-managed Omarchy shortcuts in an explicit directory."""
+import argparse
+import copy
+import difflib
+import json
+from pathlib import Path
+import re
+import shutil
+import sys
+import tempfile
+
+BEGIN = "-- BEGIN KiwiDesk Omarchy helpers\n"
+END = "-- END KiwiDesk Omarchy helpers\n"
+LEGACY = '''-- Session history for macarchy-like; shortcuts remain GUI-managed.
+-- Reloading clears history and returns to the default shortcut layer.
+MacarchyKeys = {
+    currentSpace = KiwiDesk.get_state().active_space,
+    previousSpace = nil,
+    returnModes = {},
+}
+
+KiwiDesk.on("space_change", function(id)
+    if id ~= MacarchyKeys.currentSpace then
+        MacarchyKeys.previousSpace = MacarchyKeys.currentSpace
+        MacarchyKeys.currentSpace = id
+    end
+end)
+
+function MacarchyKeys.cycle(delta)
+    local n = tonumber(KiwiDesk.get_state().active_space)
+    if not n or n < 1 or n > 10 then
+        n = delta > 0 and 0 or 11
+    end
+    KiwiDesk.focus_space(tostring((n - 1 + delta) % 10 + 1))
+end
+
+function MacarchyKeys.back()
+    if MacarchyKeys.previousSpace then
+        KiwiDesk.focus_space(MacarchyKeys.previousSpace)
+    end
+end
+
+function MacarchyKeys.scratch()
+    if KiwiDesk.get_state().active_space == "scratch" then
+        MacarchyKeys.back()
+    else
+        KiwiDesk.focus_space("scratch")
+    end
+end
+'''
+RENAMES = {
+    "macarchy-like": "default",
+    "macarchy-resize": "omarchy-resize",
+    "macarchy-system": "omarchy-system",
+    "macarchy-passthrough": "omarchy-passthrough",
+}
+WORKFLOW = re.compile(
+    r"KiwiDesk\.(?:focus|swap|focus_space|move_to_space(?:_and_follow)?|"
+    r"focus_display|move_to_display(?:_and_follow)?|move_space_to_display|"
+    r"toggle_floating|set_mode)\s*\(|(?:Macarchy|Omarchy)Keys\."
+)
+
+
+def binding(combo, label, lua, kind="custom"):
+    return dict(combo=combo, label=label, lua=lua, kind=kind)
+
+
+def canonical(combo):
+    aliases = {
+        "alt": "option", "opt": "option", "cmd": "command", "ctrl": "control",
+        "grave": "backtick", "`": "backtick", "return": "enter",
+        "esc": "escape", "backspace": "delete", "iso_section": "section",
+        "apostrophe": "quote", "'": "quote", ";": "semicolon", ",": "comma",
+        ".": "period", "/": "slash", "\\": "backslash", "-": "minus",
+        "=": "equal", "[": "leftbracket", "]": "rightbracket",
+    }
+    aliases.update({f"keypad{n}": str(n) for n in range(10)})
+    parts = (p.strip() for p in combo.lower().split("+") if p)
+    return frozenset(aliases.get(p, p) for p in parts)
+
+
+def core_bindings():
+    result = []
+
+    def add(combo, label, lua):
+        result.append(binding(combo, label, lua))
+
+    for direction in ("left", "right", "up", "down"):
+        for mods, verb, label in (
+            ("control+option", "focus", "Focus window"),
+            ("control+option+shift", "swap", "Swap window"),
+            ("control+command", "focus_display", "Focus screen"),
+            ("control+command+shift", "move_to_display_and_follow",
+             "Move window to screen and follow"),
+            ("control+option+command", "move_to_display",
+             "Send window to screen"),
+        ):
+            add(f"{mods}+{direction}", f"{label} {direction}",
+                f'KiwiDesk.{verb}("{direction}")')
+        add(f"option+command+shift+{direction}",
+            f"Move whole Space {direction}",
+            f'OmarchyKeys.moveSpace("{direction}")')
+    for number in range(1, 11):
+        for mods, verb, label in (
+            ("option", "focus_space", "Go to Space"),
+            ("option+shift", "move_to_space_and_follow", "Move and follow"),
+            ("option+command+shift", "move_to_space", "Send to Space"),
+        ):
+            add(f"{mods}+{number % 10}", f"{label} {number}",
+                f'KiwiDesk.{verb}("{number}")')
+    for combo, label, lua in (
+        ("option+tab", "Next numbered Space", "OmarchyKeys.cycle(1)"),
+        ("option+shift+tab", "Previous numbered Space", "OmarchyKeys.cycle(-1)"),
+        ("control+option+tab", "Former Space", "OmarchyKeys.back()"),
+        ("control+command+tab", "Next screen", 'KiwiDesk.focus_display("next")'),
+        ("control+command+shift+tab", "Previous screen",
+         'KiwiDesk.focus_display("prev")'),
+        ("option+f", "Monocle / previous layout",
+         "OmarchyKeys.monocle(KiwiDesk.set_mode)"),
+        ("option+t", "Toggle floating", "KiwiDesk.toggle_floating()"),
+        ("option+p", "Reset layout sizing to profile",
+         "KiwiDesk.reset_layout_sizing()"),
+        ("option+l", "Toggle Scrolling / BSP",
+         'local s = KiwiDesk.get_layout_info(); if s then '
+         'KiwiDesk.set_mode(s.space_id, s.mode == "scrolling" '
+         'and "bsp" or "scrolling") end'),
+        ("option+k", "Show shortcuts", "KiwiDesk.show_shortcuts()"),
+        ("option+space", "Show shortcuts", "KiwiDesk.show_shortcuts()"),
+        ("control+option+comma", "Open Settings", "KiwiDesk.open_settings()"),
+    ):
+        add(combo, label, lua)
+    for mods, axis, amount in (
+        ("option", "x", 100), ("option+shift", "y", 100),
+        ("control+option", "x", 25),
+    ):
+        for key, sign in (("minus", -1), ("equal", 1)):
+            add(f"{mods}+{key}", f"Resize {axis} by {amount * sign}",
+                f'KiwiDesk.resize("{axis}", {amount * sign})')
+    for combo in ("option+s", "option+backtick"):
+        add(combo, "Summon scratch / return", "OmarchyKeys.scratch()")
+    for combo in ("option+command+s", "option+shift+backtick"):
+        add(combo, "Send to scratch without following", "OmarchyKeys.sendScratch()")
+    for combo, action, label in (
+        ("control+option+f", 'set value of attribute "AXFullScreen" of '
+         'targetWindow to not (value of attribute "AXFullScreen" of '
+         'targetWindow)', "Native macOS fullscreen"),
+        ("option+w", 'perform action "AXPress" of (value of attribute '
+         '"AXCloseButton" of targetWindow)', "Close focused window"),
+        ("option+q", 'perform action "AXPress" of (value of attribute '
+         '"AXCloseButton" of targetWindow)', "Close focused window"),
+    ):
+        script = ('tell application "System Events"\n'
+                  'set targetName to name of first application process '
+                  'whose frontmost is true\ntell process targetName\n'
+                  'set targetWindow to value of attribute "AXFocusedWindow"\n'
+                  + action + '\nend tell\nend tell')
+        add(combo, label, "KiwiDesk.exec(" + json.dumps(
+            "/usr/bin/osascript -e '" + script + "'") + ")")
+    return result
+
+
+def rename_layer(layer):
+    result = copy.deepcopy(layer)
+    result["name"] = RENAMES.get(layer["name"], layer["name"])
+    for item in result["bindings"]:
+        for old, new in RENAMES.items():
+            item["lua"] = item["lua"].replace('"' + old + '"',
+                                              '"' + new + '"')
+            item["lua"] = item["lua"].replace("'" + old + "'",
+                                              "'" + new + "'")
+            item["label"] = item.get("label", "").replace(old, new)
+        if "reload_config" in item["lua"]:
+            item["label"] = "Reload config (default shortcuts stay active)"
+    return result
+
+
+def transform_config(config):
+    result = copy.deepcopy(config)
+    layers = result.get("layers", [])
+    names = [layer["name"] for layer in layers]
+    if len(names) != len(set(names)):
+        raise ValueError("Duplicate layer names; resolve them before applying")
+    for layer in layers:
+        combos = [canonical(item["combo"]) for item in layer["bindings"]]
+        if len(combos) != len(set(combos)):
+            raise ValueError(f"Duplicate shortcut in {layer['name']}")
+    for old, new in RENAMES.items():
+        if old != "macarchy-like" and old in names and new in names:
+            raise ValueError(f"Both {old} and {new} exist; resolve the collision")
+    retained = {}
+    # The legacy main layer wins over old default launcher/utilities.
+    for name in ("default", "macarchy-like"):
+        for layer in layers:
+            if layer["name"] != name:
+                continue
+            for item in rename_layer(layer)["bindings"]:
+                lua = item["lua"]
+                if WORKFLOW.search(lua) or re.search(
+                    r'KiwiDesk\.switch_layer\(["\']default["\']\)', lua
+                ):
+                    continue
+                retained[canonical(item["combo"])] = item
+    generated = core_bindings()
+    for item in generated:
+        key = canonical(item["combo"])
+        old = retained.pop(key, None)
+        if old and old["lua"] != item["lua"]:
+            # Preserve the working AX scripts only for their matching action.
+            attribute = ("AXFullScreen" if key == canonical("control+option+f")
+                         else "AXCloseButton" if key in {
+                             canonical("option+w"), canonical("option+q")}
+                         else None)
+            if not (attribute and attribute in old["lua"] and
+                    "AXFocusedWindow" in old["lua"]):
+                raise ValueError(f"Custom binding conflicts with {item['combo']}")
+            item.update(old)
+    if not any(canonical("option+enter") == key for key in retained):
+        retained[canonical("option+enter")] = binding(
+            "option+enter", "New Terminal window", 'KiwiDesk.exec('
+            '"/usr/bin/osascript -e \'tell application \\\"Terminal\\\" '
+            'to do script \\\"\\\"\'")', "application")
+    result["layers"] = [dict(name="default", bindings=generated +
+                              list(retained.values()))]
+    for layer in layers:
+        if layer["name"] in ("default", "macarchy-like"):
+            continue
+        result["layers"].append(rename_layer(layer) if
+                                layer["name"] in RENAMES else layer)
+    for layer in result["layers"]:
+        seen = set()
+        for item in layer["bindings"]:
+            key = canonical(item["combo"])
+            if key in seen:
+                raise ValueError(f"Duplicate shortcut in {layer['name']}")
+            seen.add(key)
+            if key - {"left", "right", "up", "down"} in (
+                {"option"}, {"option", "shift"}
+            ) and key & {"left", "right", "up", "down"}:
+                raise ValueError(f"Text-editing arrow in {layer['name']}")
+            if "MacarchyKeys" in item["lua"] or "macarchy-" in item["lua"]:
+                raise ValueError("Custom legacy reference needs manual migration")
+    return result
+
+
+def transform_lua(source, helper):
+    block = BEGIN + helper.rstrip() + "\n" + END
+    legacy = LEGACY
+    if source.endswith(LEGACY.rstrip("\n")):
+        legacy = LEGACY.rstrip("\n")
+    if BEGIN in source or END in source:
+        if source.count(BEGIN) != 1 or source.count(END) != 1:
+            raise ValueError("Ambiguous Omarchy helper markers")
+        start, end = source.index(BEGIN), source.index(END)
+        if end < start:
+            raise ValueError("Reversed Omarchy helper markers")
+        outside = source[:start] + source[end + len(END):]
+        updated = source[:start] + block + source[end + len(END):]
+    elif legacy in source:
+        if source.count(legacy) != 1:
+            raise ValueError("Duplicate legacy helper section")
+        outside = source.replace(legacy, "", 1)
+        updated = source.replace(legacy, block, 1)
+    else:
+        outside = source
+        updated = source + ("\n" if source and not source.endswith("\n")
+                            else "") + block
+    if re.search(r"MacarchyKeys|OmarchyKeys|macarchy-like|KiwiDesk Omarchy helpers",
+                 outside):
+        raise ValueError("Unrecognized custom helper content; migrate manually")
+    live = "\n".join(line for line in outside.splitlines()
+                     if not line.lstrip().startswith("--"))
+    if re.search(r"KiwiDesk\.(?:bind|define_layer|bind_profile_to_desktop)\s*\("
+                 r"|\b(?:app_rules|float_rules|ignore_rules)\s*="
+                 r"|\b(?:KiwiDesk|bsp|stack|scroll|grid|border|animations)\.set_"
+                 r"|border\.fit_gaps", live):
+        raise ValueError("init.lua owns managed settings; adopt GUI mode first")
+    return updated
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config-dir", required=True, type=Path)
+    parser.add_argument("--apply", action="store_true", help="back up and write")
+    args = parser.parse_args()
+    root = args.config_dir.expanduser().resolve()
+    helper = Path(__file__).with_name("omarchy-helpers.lua").read_text()
+    originals = {}
+    for name in ("gui.json", "init.lua"):
+        path = root / name
+        if path.is_symlink():
+            raise ValueError(f"Refusing to replace symlink: {path}")
+        originals[name] = path.read_text() if path.exists() else None
+    config = json.loads(originals["gui.json"]) if originals["gui.json"] else {
+        "format": 4, "spaces": [str(n) for n in range(1, 11)], "layers": []}
+    if config.get("format") != 4:
+        raise ValueError("Expected GUI configuration format 4")
+    transformed = transform_config(config)
+    new = {"gui.json": (originals["gui.json"] if transformed == config else
+                        json.dumps(transformed, indent=2, ensure_ascii=False) + "\n"),
+           "init.lua": transform_lua(originals["init.lua"] or "", helper)}
+    changed = [name for name in new if new[name] != originals[name]]
+    for name in changed:
+        print("".join(difflib.unified_diff(
+            (originals[name] or "").splitlines(True), new[name].splitlines(True),
+            fromfile=str(root / name), tofile=str(root / name) + " (proposed)")),
+            end="")
+    if not changed:
+        print("Already applied; no files changed.")
+    elif not args.apply:
+        print("Preview only. Pass --apply to back up and write these files.")
+    else:
+        root.mkdir(parents=True, exist_ok=True)
+        backup = Path(tempfile.mkdtemp(prefix="omarchy-backup-", dir=root))
+        for name in changed:
+            if originals[name] is not None:
+                shutil.copy2(root / name, backup / name)
+        (backup / "manifest.json").write_text(json.dumps({
+            "touched": changed,
+            "absent": [name for name in changed if originals[name] is None],
+        }, indent=2) + "\n")
+        for name in changed:
+            (root / name).write_text(new[name])
+        print(f"Applied. Backup: {backup}\nReload KiwiDesk when ready.")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        sys.exit(f"omarchy-config: {error}")

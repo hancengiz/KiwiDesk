@@ -24,7 +24,7 @@ private func connect(_ core: KiwiCore, _ names: [String]) {
     for (index, name) in names.enumerated() {
         core.state.workspaces.upsertDisplay(
             Display(
-                id: DisplayID(UInt32(index + 1)),
+                id: DisplayID(UInt32(index + 10001)),
                 name: name,
                 frame: CGRect(
                     x: CGFloat(index) * 100,

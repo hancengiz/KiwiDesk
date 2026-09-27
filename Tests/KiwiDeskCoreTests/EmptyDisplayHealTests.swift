@@ -17,12 +17,12 @@ import Testing
 @MainActor
 struct EmptyDisplayHealTests {
     private static let displayA = Display(
-        id: DisplayID(1),
+        id: DisplayID(10001),
         name: "A",
         frame: CGRect(x: 0, y: 0, width: 1920, height: 1080)
     )
     private static let displayB = Display(
-        id: DisplayID(2),
+        id: DisplayID(10002),
         name: "B",
         frame: CGRect(x: 1920, y: 0, width: 1920, height: 1080)
     )
@@ -58,13 +58,11 @@ struct EmptyDisplayHealTests {
         core.state.workspaces.spaces(on: display.id)
     }
 
-    /// The layout the starter setup opens B in, read off the one
-    /// walk rather than spelled (#1018) — with the main the
-    /// COMMAND door reads (`liveMainID`), since a host whose main
-    /// id is 2 re-orders the twins (#660).
+    /// Derive the starter layout from the fixture's display order.
+    /// Synthetic IDs keep the host's main display out of that order.
     private func leadOfB() -> LayoutMode? {
         let displays = [Self.displayA, Self.displayB]
-        let mainID = PositionalDisplays.liveMainID
+        let mainID = Self.displayA.id
         let position = PositionalDisplays.ordered(
             displays,
             mainID: mainID
@@ -227,7 +225,7 @@ struct EmptyDisplayHealTests {
         // every resolve.
         let core = makeCore()
         let twinB = Display(
-            id: DisplayID(2),
+            id: Self.displayB.id,
             name: "A",
             frame: CGRect(x: 1920, y: 0, width: 1920, height: 1080)
         )

@@ -314,8 +314,8 @@ struct SpacePlacementTests {
     @Test("Loading a profile adopts its live set's pins")
     func applyAdoptsPins() throws {
         let core = makeCore()
-        let a = display(1, "A")
-        let b = display(2, "B", x: 100)
+        let a = display(10001, "A")
+        let b = display(10002, "B", x: 100)
         connect(core, [a, b])
         core.state.workspaces.ensureSpace(SpaceID(1))
         try core.profiles.save(
@@ -344,7 +344,7 @@ struct SpacePlacementTests {
         #expect(core.mainSpaces == [SpaceID(2)])
         #expect(
             core.state.workspaces.display(of: SpaceID(1))
-                == DisplayID(2)
+                == b.id
         )
     }
 }

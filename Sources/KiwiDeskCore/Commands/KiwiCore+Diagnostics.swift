@@ -35,10 +35,19 @@ extension KiwiCore {
     }
 
     func listMonitors() -> CommandResponse {
-        let monitors = state.workspaces.allDisplays.map {
+        let active = activeDisplayID
+        let monitors = orderedDisplays.enumerated().map {
+            index,
             display in
             JSONValue.object([
                 "id": .number(Double(display.id.raw)),
+                "index": .number(Double(index + 1)),
+                "x": .number(Double(display.frame.minX)),
+                "y": .number(Double(display.frame.minY)),
+                "active": .bool(display.id == active),
+                "active_space": state.workspaces
+                    .activeSpace(on: display.id)
+                    .map { .string($0.raw) } ?? .null,
                 "name": .string(display.name),
                 "width": .number(Double(display.frame.width)),
                 "height": .number(
@@ -55,6 +64,8 @@ extension KiwiCore {
             var object: [String: JSONValue] = [
                 "id": .string(space.id.raw),
                 "mode": .string(space.mode.rawValue),
+                "display": state.workspaces.display(of: space.id)
+                    .map { .number(Double($0.raw)) } ?? .null,
                 "windows": .array(
                     space.windows.map {
                         .number(Double($0.raw))
@@ -153,6 +164,9 @@ extension KiwiCore {
         return .object([
             "active_space": state.workspaces.activeSpace.map {
                 .string($0.raw)
+            } ?? .null,
+            "active_display": activeDisplayID.map {
+                .number(Double($0.raw))
             } ?? .null,
             "spaces": .array(spaces),
             "windows": .array(windows),

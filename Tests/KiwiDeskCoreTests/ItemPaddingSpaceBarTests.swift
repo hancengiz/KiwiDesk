@@ -54,20 +54,27 @@ struct ItemPaddingSpaceBarTests {
         boxed: Bool = false,
         roundness: CGFloat = 50
     ) -> SpaceBarManager.Bar {
-        SpaceBarManager.Bar(
-            display: barTitleDisplay,
-            items: (1...spaces).map { n in
+        var items: [SpaceBarOverlay.Item] = []
+        for n in 1...spaces {
+            let label = String(n)
+            // Space 2 empty: a glyphless item beside
+            // glyph-bearing ones.
+            let apps: [SpaceBarItemView.App] =
+                n == 2 ? [] : [app("A"), app("B")]
+            items.append(
                 SpaceBarOverlay.Item(
-                    space: SpaceID(String(n)),
-                    spaceGlyph: .text(String(n), tinted: true),
-                    // Space 2 empty: a glyphless item beside
-                    // glyph-bearing ones.
-                    apps: n == 2 ? [] : [app("A"), app("B")],
+                    space: SpaceID(label),
+                    spaceGlyph: SpaceGlyph.text(label, tinted: true),
+                    apps: apps,
                     active: n == 1,
                     overflow: 0,
                     focusInOverflow: false
                 )
-            },
+            )
+        }
+        return SpaceBarManager.Bar(
+            display: barTitleDisplay,
+            items: items,
             frontApp: app("Front"),
             frontWindow: WindowID(1),
             strip: CGRect(x: 0, y: 0, width: 1440, height: depth),

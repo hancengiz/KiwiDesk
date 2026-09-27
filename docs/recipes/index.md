@@ -45,6 +45,12 @@ timeout, and output capture.
 
 ## Recipe pages
 
+:::unreleased
+- [**Omarchy-compatible workflow**](omarchy.md) — an opt-in
+  GUI-managed keyboard map for Spaces, screens, scratch and
+  native layouts, with a preview-first migration installer.
+:::
+
 - [**SketchyBar**](sketchybar.md) — spaces widget with click
   to focus, window icons, layout-aware styling. The flagship
   integration.

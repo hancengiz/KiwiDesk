@@ -337,12 +337,77 @@ KiwiDesk.move_to_desktop_and_follow(3)
 KiwiDesk.move_to_desktop_and_follow(3, "mail")
 ```
 
+:::unreleased
+### focus_display
+
+**Expects:** a display selector:
+
+- A 1-based positional index: main display first, then the others
+  left-to-right, breaking ties by vertical origin, fingerprint and raw id.
+  Each `list_monitors` row's `index` uses the same order.
+- A connected monitor's fingerprint or exact name. Explicit matches
+  take precedence over relative selector words.
+- `"next"` or `"prev"` in that order, wrapping at either end.
+  On one display, these stay on that display.
+- `"left"`, `"right"`, `"up"` or `"down"` from the focused display.
+  Candidates have centers in that direction; the smallest forward
+  center distance plus twice the cross-axis distance wins.
+  Positional order breaks ties. Diagonal displays are eligible.
+
+**Does:** focuses the Space the target display already shows.
+It does not create a Space or change display assignments.
+A missing neighbor, unknown selector or display with no Space
+refuses without switching.
+
+**Example:**
+
+```lua
+KiwiDesk.focus_display("left")
+KiwiDesk.focus_display(2)
+```
+
+### move_to_display
+
+**Expects:** the same display selector as `focus_display`.
+
+**Does:** moves the focused window into the target display's
+currently shown Space, keeping focus on the origin Space.
+The target display keeps showing its current Space.
+Native-fullscreen windows are refused; leave native fullscreen
+before moving them. The `move_to_space` sticky restrictions apply.
+
+**Example:**
+
+```lua
+KiwiDesk.move_to_display("next")
+```
+
+### move_to_display_and_follow
+
+**Expects:** the same display selector as `focus_display`.
+
+**Does:** moves the window as `move_to_display` does, then follows
+it with keyboard focus. Its fullscreen and sticky restrictions apply.
+
+**Example:**
+
+```lua
+KiwiDesk.move_to_display_and_follow("right")
+```
+:::
+
 ### move_space_to_display
 
 **Expects:** a space identifier, then a display reference — a
 **number** (1-based position: `1` is the main display,
 `2` the next left-to-right) or a **string** matching a connected
 monitor's fingerprint (as printed by `list_monitors`) or name.
+
+:::unreleased
+Also accepts the relative selectors described under
+[`focus_display`](#focus_display), measured from the focused display.
+A missing spatial neighbor refuses before creating or moving a Space.
+:::
 
 **Does:** moves the whole space to that monitor **now** and
 shows it there (each monitor shows one space at a time). A
@@ -360,8 +425,8 @@ KiwiDesk.move_space_to_display(3, "DELL U2723QE:3840x2160")
 
 ### pin_space_to_display
 
-**Expects:** a space identifier, then a display reference (same
-forms as `move_space_to_display`).
+**Expects:** a space identifier, then an explicit display index,
+fingerprint or name.
 
 **Does:** pins the space to that monitor by the monitor's
 fingerprint, so the assignment survives dock/undock. Overrides
@@ -5295,6 +5360,14 @@ carry `track_breaks` (ids of the windows that start a track,
 #128) and, while a track holds an uneven cross-axis split,
 `track_weights` (head window id → session weight).
 
+:::unreleased
+`active_display` is the focused display's raw numeric id, or `nil`
+when it has no display assignment. Each Space object also carries
+`display`, its assigned raw display id or `nil`.
+Join these ids to [`list_monitors`](#list_monitors); they are not
+positional selectors. JSON/IPC represents these absent values as `null`.
+:::
+
 Each window object has: `id`, `app`, `title`, `floating` (boolean).
 
 **Example:**
@@ -5310,6 +5383,30 @@ for _, window in ipairs(state.windows) do
     end
 end
 ```
+
+:::unreleased
+### list_monitors
+
+**Expects:** nothing.
+
+**Does:** returns connected monitors in positional-selector order.
+Each object contains `index` (1-based selector), `id` (raw display id),
+`name`, `fingerprint`, `x`, `y`, `width`, `height`, `active_space`
+(shown Space id or `nil`) and `active` (whether this display has focus).
+Geometry uses AppKit global coordinates in points: positive y is up.
+JSON/IPC uses `null` for an absent `active_space`.
+
+**Example:**
+
+```lua
+local state = KiwiDesk.get_state()
+for _, monitor in ipairs(KiwiDesk.list_monitors()) do
+    if monitor.id == state.active_display then
+        print(monitor.fingerprint)
+    end
+end
+```
+:::
 
 ### help
 
